@@ -18,6 +18,10 @@ on:
         description: "OPENCLAW_EXTENSIONS build-arg"
         required: false
         default: "diagnostics-otel,codex"
+      tag:
+        description: "Image tag to publish (GHCR)"
+        required: false
+        default: "custom"
 
 concurrency:
   group: build-custom-${{ github.ref }}
@@ -60,7 +64,7 @@ jobs:
           platforms: linux/amd64
           build-args: |
             OPENCLAW_EXTENSIONS=${{ github.event.inputs.extensions || 'diagnostics-otel,codex' }}
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:custom
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.event.inputs.tag || 'custom' }}
           cache-from: type=gha,scope=build-custom-amd64
           cache-to: type=gha,mode=max,scope=build-custom-amd64
           push: true
